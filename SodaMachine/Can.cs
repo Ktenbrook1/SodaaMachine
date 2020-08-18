@@ -6,7 +6,21 @@ using System.Threading.Tasks;
 
 namespace SodaMachine
 {
-    class Can
+    abstract class Can
     {
+        //has a
+        public string name;
+        protected double cost;
+        public double Cost
+        {
+            get => cost;
+        }
+        //con
+        public Can()
+        {
+         
+        }
+        //can do
+        //can be purchased/ selected
     }
 }

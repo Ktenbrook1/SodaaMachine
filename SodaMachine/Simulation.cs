@@ -8,5 +8,6 @@ namespace SodaMachine
 {
     class Simulation
     {
+        //has a soda machine and customer
     }
 }
