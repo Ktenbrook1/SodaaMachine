@@ -10,7 +10,7 @@ namespace SodaMachine
     {
         static void Main(string[] args)
         {
-            SodaMachine sodaMachine = new SodaMachine();
+            Simulation simulation = new Simulation();
         }
     }
 }

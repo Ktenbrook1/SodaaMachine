@@ -8,6 +8,8 @@ namespace SodaMachine
 {
     class Simulation
     {
-        //has a soda machine and customer
+        SodaMachine sodaMachine = new SodaMachine();
+        Customer customer = new Customer();
+
     }
 }
