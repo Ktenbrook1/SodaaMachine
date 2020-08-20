@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -13,15 +14,16 @@ namespace SodaMachine
     {
         SodaMachine sodaMachine;
         Customer customer;
+        List<Coin> moneyEntered = new List<Coin>();
 
         int locationOfSoda;
         int locationOfCoin;
         int coinNumEntered;
         string userChoice;
         double costOfSoda;
+        
 
         double newBalanceRemaining = 0.00;
-        double moneyEntered = 0.0;
         public Simulation()
         {
             sodaMachine = new SodaMachine();
@@ -33,7 +35,7 @@ namespace SodaMachine
 
             do
             {
-                int locationOfSoda = sodaMachine.CheckInventory(userChoice);
+                locationOfSoda = sodaMachine.CheckInventory(userChoice);
                 if (locationOfSoda == -1)
                 {
                     UserInterface.TryToSelectAgain();
@@ -88,53 +90,79 @@ namespace SodaMachine
         }
         public void UsingCash()
         {
+            
             do
             {
                 coinNumEntered = UserInterface.GetCoins();
                 locationOfCoin = customer.FindCoin(coinNumEntered, locationOfCoin);
                 double valueOfCoin = customer.wallet.customerCoins[locationOfCoin].Value;
-                moneyEntered += valueOfCoin;
+
+                moneyEntered.Add(customer.wallet.customerCoins[locationOfCoin]);
+
                 customer.wallet.customerCoins.RemoveAt(locationOfCoin);
                 int continueOrCancel = UserInterface.CancelTransaction();
-                if(continueOrCancel == 1)
+                
+                if (continueOrCancel == 2)
                 {
                     UserInterface.VoidPurchase();
+                    GiveBackMoney();
+              
                     Console.ReadKey();
                     break;
                 }
+                
                 //show new balance if possible withput getting crzy number
                 newBalanceRemaining = costOfSoda - valueOfCoin;
-            } while (moneyEntered < costOfSoda);
+            } while (PutInMoneyTotal() < costOfSoda);
         }
         public void DispenceChange()
         {
             //if they enter to much for the system to give proper money back then cancel the transaction and return thr money
-            if (moneyEntered == costOfSoda)
+            if (PutInMoneyTotal() == costOfSoda)
             {
                 UserInterface.SuccessfulPurchase();
                 customer.backpack.cansPurchased.Add(sodaMachine.cans[locationOfSoda]);
                 sodaMachine.cans.RemoveAt(locationOfSoda);
             }
             //if they enter to much but i can make change with what i have then I can return proper change and despence soda
-            else if (moneyEntered > costOfSoda)
+            else if (PutInMoneyTotal() > costOfSoda)
             {
                 double runningTotalInMachine = 0.00;
                 for(int i = 0; i > sodaMachine.coins[i].Value; i++)
                 {
                     runningTotalInMachine += sodaMachine.coins[i].Value;
                 };
-                double moneyNeededBack = moneyEntered - costOfSoda;
+                double moneyNeededBack = PutInMoneyTotal() - costOfSoda;
                 if(runningTotalInMachine > moneyNeededBack)
                 {
                     UserInterface.NotEnoughChangeInMachine();
+                    GiveBackMoney();
                     //make it either run again with new change or allow them to void
                 }
                 else
                 {
-                    UserInterface.ReturnChange(moneyEntered, costOfSoda);
+                    UserInterface.ReturnChange(PutInMoneyTotal(), costOfSoda);
                     customer.backpack.cansPurchased.Add(sodaMachine.cans[locationOfSoda]);
                     sodaMachine.cans.RemoveAt(locationOfSoda);
+                    //could add the money entered to the soda machine
                 } 
+            }
+        }
+        public double PutInMoneyTotal()
+        {
+            double runningTotalChangeEntered = 0.0;
+            for(int i = 0; i < moneyEntered.Count; i++)
+            {
+                runningTotalChangeEntered += moneyEntered[i].Value;
+            }
+            return runningTotalChangeEntered;
+        }
+        public void GiveBackMoney()
+        {
+            for (int i = 0; i < moneyEntered.Count; i++)
+            {
+                customer.wallet.customerCoins.Add(moneyEntered[i]);
+                moneyEntered.RemoveAt(i);
             }
         }
     }

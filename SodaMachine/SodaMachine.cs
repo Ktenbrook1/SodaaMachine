@@ -18,14 +18,17 @@ namespace SodaMachine
         public int CheckInventory(string sodaSelection)
         {
             int indexOfSoda = -1;
-
-            for (int i = 0; i < cans.Count; i++)
+            do
             {
-                if (sodaSelection == cans[i].name)
+                for (int i = 0; i < cans.Count; i++)
                 {
-                    return i;
+                    if (sodaSelection == cans[i].name)
+                    {
+                        return i;
+                    }
                 }
-            }
+            } while (indexOfSoda == -1);
+           
             return indexOfSoda;
         }
         private void StartingInventory()

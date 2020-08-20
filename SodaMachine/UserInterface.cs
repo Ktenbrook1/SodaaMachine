@@ -20,7 +20,9 @@ namespace SodaMachine
         }
         public static void VoidPurchase()
         {
-            Console.WriteLine("Sorry, the purchase was unsuccessful");
+            Console.WriteLine("Sorry, the purchase was unsuccessful." +
+                "\nAny change or payment you have entered will be dispenced or back onto your card." +
+                "\nHave a nice day!");
         }
         public static void SuccessfulPurchase()
         {
@@ -75,8 +77,19 @@ namespace SodaMachine
         }
         public static int CancelTransaction()
         {
-            Console.WriteLine("If you wish to cancel this transaction pick '1' To continue press any key ");
-            int continueOrCancel = int.Parse(Console.ReadLine());
+            //To make this project better I could run PriceOfSoda and add another option to void the transaction
+            Console.WriteLine("If you wish to continue this transaction and add another coin pick '1' To cancel press '2' ");
+            bool success = false;
+            int continueOrCancel = 0;
+            do
+            {
+                success = Int32.TryParse(Console.ReadLine(), out continueOrCancel);
+                if (success)
+                {
+                    return continueOrCancel;
+                }
+                    TryToSelectAgain();
+            } while (!success);
             return continueOrCancel;
         }
         public static void NotEnoughChangeInMachine()
