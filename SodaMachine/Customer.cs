@@ -8,30 +8,42 @@ namespace SodaMachine
 {
     class Customer
     {
-        Backpack backpack = new Backpack();
-        Wallet wallet = new Wallet();
+        public Backpack backpack = new Backpack();
+        public Wallet wallet = new Wallet();
         public Customer()
         {
             
         }
         //can do, can pick a soda, can pick change
+        public int CheckWallet(string coinPicked)
+        {
+            int index = -1;
+            for (int i = 0; i < wallet.customerCoins.Count; i++)
+            {
+                if (coinPicked == wallet.customerCoins[i].name)
+                {
+                    return i;
+                }
+            }
+            return index;
+        }
         public string ChooseSoda(List<Can> cans)//will pass 
         {
-            UserInterface.AskUser();
+            int usersChoice = UserInterface.AskUser();
             //will need to add validation to make sure there is enough in inventory
             
-            if (UserInterface.UsersChoice == 1)
+            if (usersChoice == 1)
             {
                 return "Cola";
             }
-            else if (UserInterface.UsersChoice == 2)
+            else if (usersChoice == 2)
             {
                 //int locationOfOrangeSoda = 0; 
                 //Can removedSoda = cans[locationOfOrangeSoda];
                 //cans.RemoveAt(locationOfOrangeSoda);
                 return "OrangeSoda";
             }
-            else if (UserInterface.UsersChoice == 3)
+            else if (usersChoice == 3)
             {
                 return "Rootbeer";
             }
@@ -40,21 +52,29 @@ namespace SodaMachine
                 return "no";
             }            
         }
-        public void SelectCoins(List<Can> cans)
+        public string SelectCoins(int coinType)
         {
-            
 
-            //tell them the price of that can
-            //will need to record the index of where the proper can is...
-
-
-            //then let them enter whatever change the want
-            //if they enter to much for the system to give proper money back then cancel the transaction and return thr money
-            //if they enter to much but i can make change with what i have then I can return proper change and despence soda
-            //if they dont enter enough then dont complete the transaction and give the money back
-            //if they enter exact change dispence the soda
-            //if they pay with card check available funds and give them the soda if they have enough
-           
+            if (coinType == 1)
+            {
+                return "Quarter";
+            }
+            else if (coinType == 2)
+            {
+                return "Dime";
+            }
+            else if (coinType == 3)
+            {
+                return "Nickle";
+            }
+            else if (coinType == 4)
+            {
+                return "Penny";
+            }
+            else
+            {
+                return "no";
+            }
         }
         public void SuccessfulPurchase()//pass through that one can
         {

@@ -22,15 +22,15 @@ namespace SodaMachine
 
             // loop through the cans
             // compare the .name of each can to the 'sodaSelection'
-            for(int i = 0; i < cans.Count; i++)
+            for (int i = 0; i < cans.Count; i++)
             {
-                //if(sodaSelection == cans.name)
-                //{
-                //    int indexOfSoda = cans[can];
-                //}
+                if (sodaSelection == cans[i].name)
+                {
+                    return i;
+                }
             }
-
             return indexOfSoda;
+
         }
         private void StartingInventory()
         {

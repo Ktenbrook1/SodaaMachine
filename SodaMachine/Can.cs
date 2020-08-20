@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SodaMachine
 {
-    abstract class Can
+    public abstract class Can
     {
         //has a
         public string name;
