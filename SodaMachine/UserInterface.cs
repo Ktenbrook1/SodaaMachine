@@ -25,7 +25,6 @@ namespace SodaMachine
         public static void SuccessfulPurchase()
         {
             Console.WriteLine("The purchase was successful! Enjoy!");
-            Console.ReadLine();
         }
         public static void TryToSelectAgain()
         {
@@ -66,6 +65,7 @@ namespace SodaMachine
             double coinEntered = int.Parse(Console.ReadLine());
             return coinEntered;
         }
+        //might not need this
         public static void ReturnChange(double moneyEntered, double cost)
         {
             //might not work, need to look up math.round
@@ -78,6 +78,11 @@ namespace SodaMachine
             Console.WriteLine("If you wish to cancel this transaction pick '1' To continue press any key ");
             int continueOrCancel = int.Parse(Console.ReadLine());
             return continueOrCancel;
+        }
+        public static void NotEnoughChangeInMachine()
+        {
+            Console.WriteLine("Were sorry but the amount you entered is to large for our machine to give you back " +
+                "\n the proper change. Here is your money back. Please enter a smaller amount to continue.");
         }
     }
 }

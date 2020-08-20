@@ -15,13 +15,10 @@ namespace SodaMachine
         {
             StartingInventory();
         }
-
         public int CheckInventory(string sodaSelection)
         {
             int indexOfSoda = -1;
 
-            // loop through the cans
-            // compare the .name of each can to the 'sodaSelection'
             for (int i = 0; i < cans.Count; i++)
             {
                 if (sodaSelection == cans[i].name)
@@ -30,7 +27,6 @@ namespace SodaMachine
                 }
             }
             return indexOfSoda;
-
         }
         private void StartingInventory()
         {
@@ -77,7 +73,6 @@ namespace SodaMachine
                 RootBeer rootBeer = new RootBeer();
                 cans.Add(rootBeer);
             }
-
         }
     }
 }

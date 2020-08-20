@@ -20,7 +20,5 @@ namespace SodaMachine
         {
          
         }
-        //can do
-        //can be purchased/ selected
     }
 }

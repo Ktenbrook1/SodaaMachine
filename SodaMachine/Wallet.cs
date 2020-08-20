@@ -10,11 +10,12 @@ namespace SodaMachine
     {
         //has coins and a card
         public List<Coin> customerCoins = new List<Coin>();
-        public Card card = new Card();
+        public Card card;
 
         public Wallet()
         {
             StartingChange();
+            card = new Card();
         }
 
         private void StartingChange()

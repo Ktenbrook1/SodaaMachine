@@ -8,11 +8,12 @@ namespace SodaMachine
 {
     class Customer
     {
-        public Backpack backpack = new Backpack();
-        public Wallet wallet = new Wallet();
+        public Backpack backpack;
+        public Wallet wallet;
         public Customer()
         {
-            
+            backpack = new Backpack();
+            wallet = new Wallet();
         }
         //can do, can pick a soda, can pick change
         public int CheckWallet(string coinPicked)
@@ -86,7 +87,7 @@ namespace SodaMachine
             {
                 string coinEntered = SelectCoins(coinNumEntered);
 
-                int locationOfCoin = CheckWallet(coinEntered);
+                locationOfCoin = CheckWallet(coinEntered);
                 if (locationOfCoin == -1)
                 {
                     UserInterface.TryToSelectAgain();

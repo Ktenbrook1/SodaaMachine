@@ -16,9 +16,8 @@ namespace SodaMachine
 
         int locationOfSoda;
         int locationOfCoin;
-        public int coinNumEntered;
-        public string userChoice;
-        public double PriceOfSoda;
+        int coinNumEntered;
+        string userChoice;
         double costOfSoda;
 
         double newBalanceRemaining = 0.00;
@@ -30,7 +29,7 @@ namespace SodaMachine
         }
         public void RunMachine()
         {
-            string userChoice = customer.ChooseSoda(sodaMachine.cans);
+            userChoice = customer.ChooseSoda(sodaMachine.cans);
 
             do
             {
@@ -56,12 +55,13 @@ namespace SodaMachine
                 else if (cashOrCard == 2)
                 {
                     UsingCash();
+                    DispenceChange();
                 }
                 else
                 {
                     UserInterface.TryToSelectAgain();
                     int continueOrCancel = UserInterface.CancelTransaction();
-                    if(continueOrCancel == 1)
+                    if (continueOrCancel == 1)
                     {
                         UserInterface.VoidPurchase();
                         Console.ReadKey();
@@ -69,24 +69,7 @@ namespace SodaMachine
                     }
                     isValid = true;
                 }
-            } while (isValid);
-           
-
-            //if they enter to much for the system to give proper money back then cancel the transaction and return thr money
-            if (moneyEntered == costOfSoda)
-            {
-                UserInterface.SuccessfulPurchase();
-                customer.backpack.cansPurchased.Add(sodaMachine.cans[locationOfSoda]);
-                sodaMachine.cans.RemoveAt(locationOfSoda);            
-            }
-            //if they enter to much but i can make change with what i have then I can return proper change and despence soda
-            else if (moneyEntered > costOfSoda)
-            {
-                UserInterface.ReturnChange(moneyEntered, costOfSoda);
-                customer.backpack.cansPurchased.Add(sodaMachine.cans[locationOfSoda]);
-                sodaMachine.cans.RemoveAt(locationOfSoda);
-            }
-            //if they pay with card check available funds and give them the soda if they have eno
+            } while (isValid); 
         }
         public void UsingCard()
         {
@@ -102,7 +85,6 @@ namespace SodaMachine
             {
                 UserInterface.VoidPurchase();
             }
-
         }
         public void UsingCash()
         {
@@ -123,6 +105,37 @@ namespace SodaMachine
                 //show new balance if possible withput getting crzy number
                 newBalanceRemaining = costOfSoda - valueOfCoin;
             } while (moneyEntered < costOfSoda);
+        }
+        public void DispenceChange()
+        {
+            //if they enter to much for the system to give proper money back then cancel the transaction and return thr money
+            if (moneyEntered == costOfSoda)
+            {
+                UserInterface.SuccessfulPurchase();
+                customer.backpack.cansPurchased.Add(sodaMachine.cans[locationOfSoda]);
+                sodaMachine.cans.RemoveAt(locationOfSoda);
+            }
+            //if they enter to much but i can make change with what i have then I can return proper change and despence soda
+            else if (moneyEntered > costOfSoda)
+            {
+                double runningTotalInMachine = 0.00;
+                for(int i = 0; i > sodaMachine.coins[i].Value; i++)
+                {
+                    runningTotalInMachine += sodaMachine.coins[i].Value;
+                };
+                double moneyNeededBack = moneyEntered - costOfSoda;
+                if(runningTotalInMachine > moneyNeededBack)
+                {
+                    UserInterface.NotEnoughChangeInMachine();
+                    //make it either run again with new change or allow them to void
+                }
+                else
+                {
+                    UserInterface.ReturnChange(moneyEntered, costOfSoda);
+                    customer.backpack.cansPurchased.Add(sodaMachine.cans[locationOfSoda]);
+                    sodaMachine.cans.RemoveAt(locationOfSoda);
+                } 
+            }
         }
     }
 }
