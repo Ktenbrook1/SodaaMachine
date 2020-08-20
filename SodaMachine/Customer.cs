@@ -15,37 +15,50 @@ namespace SodaMachine
             
         }
         //can do, can pick a soda, can pick change
-        public void ChooseSoda(List<Can> cans)//will pass in a value
+        public string ChooseSoda(List<Can> cans)//will pass 
         {
             UserInterface.AskUser();
-            if(UserInterface.UsersChoice == 1)
+            //will need to add validation to make sure there is enough in inventory
+            
+            if (UserInterface.UsersChoice == 1)
             {
-                Cola cola = new Cola();
-                cans.Add(cola);
+                return "Cola";
             }
-            else if(UserInterface.UsersChoice == 2)
+            else if (UserInterface.UsersChoice == 2)
             {
-                OrangeSoda orangeSoda = new OrangeSoda();
-                cans.Add(orangeSoda);
+                //int locationOfOrangeSoda = 0; 
+                //Can removedSoda = cans[locationOfOrangeSoda];
+                //cans.RemoveAt(locationOfOrangeSoda);
+                return "OrangeSoda";
             }
-            else if(UserInterface.UsersChoice == 3)
+            else if (UserInterface.UsersChoice == 3)
             {
-                RootBeer rootBeer = new RootBeer();
-                cans.Add(rootBeer);
+                return "Rootbeer";
             }
+            else
+            {
+                return "no";
+            }            
         }
-        public void SelectCoins()
+        public void SelectCoins(List<Can> cans)
         {
-            int coinChoice = 0;
-            //loop goes here
-            //do
-            //{
-            //    if (coinChoice == 1)
-            //    {
-            //        wallet.customerCoins.Remove();
-            //    }
-            //} while ();
+            
+
+            //tell them the price of that can
+            //will need to record the index of where the proper can is...
+
+
+            //then let them enter whatever change the want
+            //if they enter to much for the system to give proper money back then cancel the transaction and return thr money
+            //if they enter to much but i can make change with what i have then I can return proper change and despence soda
+            //if they dont enter enough then dont complete the transaction and give the money back
+            //if they enter exact change dispence the soda
+            //if they pay with card check available funds and give them the soda if they have enough
            
+        }
+        public void SuccessfulPurchase()//pass through that one can
+        {
+            //add to backpack
         }
     }
 }

@@ -11,5 +11,14 @@ namespace SodaMachine
         SodaMachine sodaMachine = new SodaMachine();
         Customer customer = new Customer();
 
+        public void RunMachine()
+        {
+            string userChoice = customer.ChooseSoda(sodaMachine.cans);
+            int locationOfSoda = sodaMachine.CheckInventory(userChoice);
+
+
+
+        }
+
     }
 }

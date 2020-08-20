@@ -23,5 +23,13 @@ namespace SodaMachine
                 "\n3. Rootbeer");
             int usersChoice = int.Parse(Console.ReadLine());
         }
+        public static void VoidPurchase()
+        {
+            Console.WriteLine("Sorry, the purchase was unsuccessful");
+        }
+        public static void TryToSelectAgain()
+        {
+            Console.WriteLine("That is not a valid option. Please try again...");
+        }
     }
 }
