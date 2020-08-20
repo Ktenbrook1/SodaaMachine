@@ -2,21 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace SodaMachine
 {
     class Simulation
     {
-        SodaMachine sodaMachine = new SodaMachine();
-        Customer customer = new Customer();
+        SodaMachine sodaMachine;
+        Customer customer;
 
         int locationOfSoda;
         int locationOfCoin;
         public int coinNumEntered;
         public string userChoice;
         public double PriceOfSoda;
+        double costOfSoda;
+
+        double newBalanceRemaining = 0.00;
+        double moneyEntered = 0.0;
+        public Simulation()
+        {
+            sodaMachine = new SodaMachine();
+            customer = new Customer();
+        }
         public void RunMachine()
         {
             string userChoice = customer.ChooseSoda(sodaMachine.cans);
@@ -30,51 +41,88 @@ namespace SodaMachine
                 }
             } while (locationOfSoda == -1);
 
-            //find cost
-            double costOfSoda = sodaMachine.cans[locationOfSoda].Cost;
+            costOfSoda = sodaMachine.cans[locationOfSoda].Cost;
             UserInterface.PriceOfSoda(sodaMachine.cans[locationOfSoda]);
-           
 
-            double newBalanceRemaining = 0.00;
-            double moneyEntered = 0.0;
+            bool isValid;
             do
             {
-                coinNumEntered = UserInterface.GetCoins();
-                //with the location of the coin find the value
-                locationOfCoin = FindCoin();
-                double valueOfCoin = customer.wallet.customerCoins[locationOfCoin].Value;
-                //once value is found remove it from wallet
-                moneyEntered += valueOfCoin;
-                customer.wallet.customerCoins.RemoveAt(locationOfCoin);
-                newBalanceRemaining = costOfSoda - valueOfCoin;
-
-                //show new balance
-            } while (moneyEntered < costOfSoda);
+                isValid = false;
+                int cashOrCard = UserInterface.CardOrCash();
+                if (cashOrCard == 1)
+                {
+                    UsingCard();
+                }
+                else if (cashOrCard == 2)
+                {
+                    UsingCash();
+                }
+                else
+                {
+                    UserInterface.TryToSelectAgain();
+                    int continueOrCancel = UserInterface.CancelTransaction();
+                    if(continueOrCancel == 1)
+                    {
+                        UserInterface.VoidPurchase();
+                        Console.ReadKey();
+                        break;
+                    }
+                    isValid = true;
+                }
+            } while (isValid);
+           
 
             //if they enter to much for the system to give proper money back then cancel the transaction and return thr money
-            if(moneyEntered == costOfSoda)
+            if (moneyEntered == costOfSoda)
             {
                 UserInterface.SuccessfulPurchase();
+                customer.backpack.cansPurchased.Add(sodaMachine.cans[locationOfSoda]);
+                sodaMachine.cans.RemoveAt(locationOfSoda);            
             }
             //if they enter to much but i can make change with what i have then I can return proper change and despence soda
-            //if they dont enter enough then dont complete the transaction and give the money back
-            //if they enter exact change dispence the soda
-            //if they pay with card check available funds and give them the soda if they have enough
+            else if (moneyEntered > costOfSoda)
+            {
+                UserInterface.ReturnChange(moneyEntered, costOfSoda);
+                customer.backpack.cansPurchased.Add(sodaMachine.cans[locationOfSoda]);
+                sodaMachine.cans.RemoveAt(locationOfSoda);
+            }
+            //if they pay with card check available funds and give them the soda if they have eno
         }
-        public int FindCoin()
+        public void UsingCard()
+        {
+            if(customer.wallet.card.AvailiableFunds >= costOfSoda)
+            {
+                UserInterface.SuccessfulPurchase();
+                double moneyTakenOut = costOfSoda;
+                customer.wallet.card.ChargeCard(costOfSoda);
+                customer.backpack.cansPurchased.Add(sodaMachine.cans[locationOfSoda]);
+                sodaMachine.cans.RemoveAt(locationOfSoda);
+            }
+            else
+            {
+                UserInterface.VoidPurchase();
+            }
+
+        }
+        public void UsingCash()
         {
             do
             {
-                string coinEntered = customer.SelectCoins(coinNumEntered);
-
-                int locationOfCoin = customer.CheckWallet(coinEntered);
-                if (locationOfCoin == -1)
+                coinNumEntered = UserInterface.GetCoins();
+                locationOfCoin = customer.FindCoin(coinNumEntered, locationOfCoin);
+                double valueOfCoin = customer.wallet.customerCoins[locationOfCoin].Value;
+                moneyEntered += valueOfCoin;
+                customer.wallet.customerCoins.RemoveAt(locationOfCoin);
+                int continueOrCancel = UserInterface.CancelTransaction();
+                if(continueOrCancel == 1)
                 {
-                    UserInterface.TryToSelectAgain();
+                    UserInterface.VoidPurchase();
+                    Console.ReadKey();
+                    break;
                 }
-            } while (locationOfCoin == -1);
-            return locationOfCoin;
+                //show new balance if possible withput getting crzy number
+                newBalanceRemaining = costOfSoda - valueOfCoin;
+            } while (moneyEntered < costOfSoda);
         }
-
     }
 }

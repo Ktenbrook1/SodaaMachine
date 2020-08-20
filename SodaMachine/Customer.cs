@@ -80,5 +80,19 @@ namespace SodaMachine
         {
             //add to backpack
         }
+        public int FindCoin(int coinNumEntered, int locationOfCoin)
+        {
+            do
+            {
+                string coinEntered = SelectCoins(coinNumEntered);
+
+                int locationOfCoin = CheckWallet(coinEntered);
+                if (locationOfCoin == -1)
+                {
+                    UserInterface.TryToSelectAgain();
+                }
+            } while (locationOfCoin == -1);
+            return locationOfCoin;
+        }
     }
 }

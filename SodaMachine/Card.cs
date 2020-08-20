@@ -14,5 +14,14 @@ namespace SodaMachine
         {
             get => availableFunds;
         }
+        public Card()
+        {
+            availableFunds = .50;
+        }
+
+        public void ChargeCard(double chargeValue)
+        {
+            availableFunds -= chargeValue;
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace SodaMachine
     {
         //has coins and a card
         public List<Coin> customerCoins = new List<Coin>();
-        Card card = new Card();
+        public Card card = new Card();
 
         public Wallet()
         {

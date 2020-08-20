@@ -25,6 +25,7 @@ namespace SodaMachine
         public static void SuccessfulPurchase()
         {
             Console.WriteLine("The purchase was successful! Enjoy!");
+            Console.ReadLine();
         }
         public static void TryToSelectAgain()
         {
@@ -33,6 +34,12 @@ namespace SodaMachine
         public static void PriceOfSoda(Can soda)
         {
             Console.WriteLine("The price of {0} is {1}",soda.name, soda.Cost);
+        }
+        public static int CardOrCash()
+        {
+            Console.WriteLine("Enter '1' for Card or '2' for Cash");
+            int cashOrCard = int.Parse(Console.ReadLine());
+            return cashOrCard;
         }
         public static int GetCoins()
         {
@@ -44,6 +51,10 @@ namespace SodaMachine
             int coinEntered = int.Parse(Console.ReadLine());
             return coinEntered;
         }
+        //public static double RemainingBalance()
+        //{
+        //    return; 
+        //}
         public static double PriceOfSoda()
         {
             Console.WriteLine("The price of {0} is {1}");
@@ -54,6 +65,19 @@ namespace SodaMachine
                 "\n4. Enter Penny");
             double coinEntered = int.Parse(Console.ReadLine());
             return coinEntered;
+        }
+        public static void ReturnChange(double moneyEntered, double cost)
+        {
+            //might not work, need to look up math.round
+            double change = moneyEntered - cost;
+            Console.WriteLine("Here is your change {0}", change);
+            SuccessfulPurchase();
+        }
+        public static int CancelTransaction()
+        {
+            Console.WriteLine("If you wish to cancel this transaction pick '1' To continue press any key ");
+            int continueOrCancel = int.Parse(Console.ReadLine());
+            return continueOrCancel;
         }
     }
 }

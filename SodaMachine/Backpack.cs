@@ -8,7 +8,11 @@ namespace SodaMachine
 {
     class Backpack
     {
-        List<Can> cansPurchased = new List<Can>();
+        public List<Can> cansPurchased = new List<Can>();
         //only cans they have purchased
+        public Backpack()
+        {
+
+        }
     }
 }
