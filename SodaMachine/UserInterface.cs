@@ -15,7 +15,22 @@ namespace SodaMachine
                 "\n1. Coca Cola" +
                 "\n2. Orange Soda" +
                 "\n3. Rootbeer");
-            int usersChoice = int.Parse(Console.ReadLine());
+            bool success = false;
+            int usersChoice = 0;
+            do
+            {
+                success = Int32.TryParse(Console.ReadLine(), out usersChoice);
+                if (success)
+                {
+                    if (usersChoice == 1 || usersChoice == 2 || usersChoice == 3)
+                    {
+                        return usersChoice;
+                    }
+                }
+                success = true;
+                TryToSelectAgain();
+            } while (success);
+            
             return usersChoice;
         }
         public static void VoidPurchase()
@@ -44,29 +59,51 @@ namespace SodaMachine
         }
         public static int GetCoins()
         {
-            Console.WriteLine("Please enter the coins you plan to enter" +
+            Console.WriteLine("Please enter the coins you plan to enter or press 5 to cancel transaction" +
                 "\n1. Enter Quarter" +
                 "\n2. Enter Dime" +
                 "\n3. Enter Nickle" +
-                "\n4. Enter Penny");
-            int coinEntered = int.Parse(Console.ReadLine());
+                "\n4. Enter Penny" +
+                "\n5. Cancel Transaction");
+          
+            bool success = false;
+            int coinEntered = 0;
+            do
+            {
+                success = Int32.TryParse(Console.ReadLine(), out coinEntered);
+                if (success)
+                {
+                    if (coinEntered == 1 || coinEntered == 2 || coinEntered == 3 || coinEntered == 4)
+                    {
+                        return coinEntered;
+                    }
+                    else if(coinEntered == 5)
+                    {
+                        CancelTransaction();
+                    }
+                }
+                success = true;
+                TryToSelectAgain();
+            } while (success);
+
+            int continueOrCancel = UserInterface.CancelTransaction();
+            //I really want to change this
+            if (continueOrCancel == 2)
+            {
+                UserInterface.VoidPurchase();
+                GiveBackMoney();
+
+                Console.ReadKey();
+                break;
+            }
+
             return coinEntered;
         }
         //public static double RemainingBalance()
         //{
         //    return; 
         //}
-        public static double PriceOfSoda()
-        {
-            Console.WriteLine("The price of {0} is {1}");
-            Console.WriteLine("Please enter the coins you plan to enter" +
-                "\n1. Enter Quarter" +
-                "\n2. Enter Dime" +
-                "\n3. Enter Nickle" +
-                "\n4. Enter Penny");
-            double coinEntered = int.Parse(Console.ReadLine());
-            return coinEntered;
-        }
+       
         //might not need this
         public static void ReturnChange(double moneyEntered, double cost)
         {
@@ -86,10 +123,14 @@ namespace SodaMachine
                 success = Int32.TryParse(Console.ReadLine(), out continueOrCancel);
                 if (success)
                 {
-                    return continueOrCancel;
+                    if(continueOrCancel == 1 || continueOrCancel == 2)
+                    {
+                        return continueOrCancel;
+                    }   
                 }
-                    TryToSelectAgain();
-            } while (!success);
+                success = true;
+                TryToSelectAgain();
+            } while (success);
             return continueOrCancel;
         }
         public static void NotEnoughChangeInMachine()

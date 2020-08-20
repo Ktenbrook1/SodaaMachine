@@ -31,8 +31,15 @@ namespace SodaMachine
         }
         public void RunMachine()
         {
-            userChoice = customer.ChooseSoda(sodaMachine.cans);
-
+            do
+            {
+                userChoice = customer.ChooseSoda(sodaMachine.cans);
+                if(userChoice == "no")
+                {
+                    UserInterface.TryToSelectAgain();
+                }
+            } while (userChoice == "no");
+           
             do
             {
                 locationOfSoda = sodaMachine.CheckInventory(userChoice);
@@ -94,23 +101,27 @@ namespace SodaMachine
             do
             {
                 coinNumEntered = UserInterface.GetCoins();
+                if(coinNumEntered == 5)
+                {
+                    int continueOrCancel = UserInterface.CancelTransaction();
+                   
+                    if (continueOrCancel == 2)
+                    {
+                        UserInterface.VoidPurchase();
+                        GiveBackMoney();
+
+                        Console.ReadKey();
+                        break;
+                    }
+                }
                 locationOfCoin = customer.FindCoin(coinNumEntered, locationOfCoin);
                 double valueOfCoin = customer.wallet.customerCoins[locationOfCoin].Value;
 
                 moneyEntered.Add(customer.wallet.customerCoins[locationOfCoin]);
 
                 customer.wallet.customerCoins.RemoveAt(locationOfCoin);
-                int continueOrCancel = UserInterface.CancelTransaction();
                 
-                if (continueOrCancel == 2)
-                {
-                    UserInterface.VoidPurchase();
-                    GiveBackMoney();
-              
-                    Console.ReadKey();
-                    break;
-                }
-                
+
                 //show new balance if possible withput getting crzy number
                 newBalanceRemaining = costOfSoda - valueOfCoin;
             } while (PutInMoneyTotal() < costOfSoda);
@@ -127,13 +138,8 @@ namespace SodaMachine
             //if they enter to much but i can make change with what i have then I can return proper change and despence soda
             else if (PutInMoneyTotal() > costOfSoda)
             {
-                double runningTotalInMachine = 0.00;
-                for(int i = 0; i > sodaMachine.coins[i].Value; i++)
-                {
-                    runningTotalInMachine += sodaMachine.coins[i].Value;
-                };
                 double moneyNeededBack = PutInMoneyTotal() - costOfSoda;
-                if(runningTotalInMachine > moneyNeededBack)
+                if(MoneyInMachineTotal() > moneyNeededBack)
                 {
                     UserInterface.NotEnoughChangeInMachine();
                     GiveBackMoney();
@@ -156,6 +162,15 @@ namespace SodaMachine
                 runningTotalChangeEntered += moneyEntered[i].Value;
             }
             return runningTotalChangeEntered;
+        }
+        public double MoneyInMachineTotal()
+        {
+            double runningTotalInMachine = 0.00;
+            for (int i = 0; i < sodaMachine.coins.Count; i++)
+            {
+                runningTotalInMachine += sodaMachine.coins[i].Value;
+            }
+            return runningTotalInMachine;
         }
         public void GiveBackMoney()
         {
