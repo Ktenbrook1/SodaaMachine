@@ -170,7 +170,7 @@ namespace SodaMachine
             else if (PutInMoneyTotal() > costOfSoda)
             {
                 double moneyNeededBack = PutInMoneyTotal() - costOfSoda;
-                if(MoneyInMachineTotal() > moneyNeededBack)
+                if(MoneyInMachineTotal() < Math.Round(moneyNeededBack))
                 {
                     UserInterface.NotEnoughChangeInMachine();
                     UserInterface.MoneyDispenced(PutInMoneyTotal());

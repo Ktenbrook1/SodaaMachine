@@ -54,7 +54,21 @@ namespace SodaMachine
         public static int CardOrCash()
         {
             Console.WriteLine("Enter '1' for Card or '2' for Cash");
-            int cashOrCard = int.Parse(Console.ReadLine());
+            int cashOrCard = 0;
+            bool success = false;
+            do
+            {
+                success = Int32.TryParse(Console.ReadLine(), out cashOrCard);
+                if (success)
+                {
+                    if (cashOrCard == 1 || cashOrCard == 2)
+                    {
+                        return cashOrCard;
+                    }
+                }
+                success = true;
+                TryToSelectAgain();
+            } while (success);
             return cashOrCard;
         }
         public static int GetCoins()
@@ -155,6 +169,7 @@ namespace SodaMachine
             }
             else
             {
+                moneyNeeded = moneyNeeded * -1;
                 Console.WriteLine("We own you {0}", moneyNeeded);
             }
             
