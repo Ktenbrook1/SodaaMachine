@@ -156,8 +156,18 @@ namespace SodaMachine
         }
         public static string YouOweMoney(double funds)
         {
-            Console.WriteLine("There was only {0} paid. Would you like to pay the rest in cash? 'yes' or 'no'", funds);
-            string restInCash = Console.ReadLine().ToLower();
+            bool tryAgain = true;
+            string restInCash = " ";
+            do
+            {
+                Console.WriteLine("There was only {0} paid. Would you like to pay the rest in cash? 'yes' or 'no'", funds);
+                restInCash = Console.ReadLine().ToLower();
+                if (restInCash == "yes" || restInCash == "no")
+                {
+                    return restInCash;
+                }
+                TryToSelectAgain();
+            } while (tryAgain);
             return restInCash;
         }
         public static void YouNowOwe(double moneyNeeded, double costOfSoda)
@@ -172,11 +182,15 @@ namespace SodaMachine
                 moneyNeeded = moneyNeeded * -1;
                 Console.WriteLine("We own you {0}", moneyNeeded);
             }
-            
         }
         public static void MoneyDispenced(double moneyIn)
         {
             Console.WriteLine("{0} has been despenced down below. Thank you.", moneyIn);
+        }
+        public static void BuyAnother()
+        {
+            Console.WriteLine("Would you like to purchase another? 'yes' or 'no");
+
         }
         public static void Readline()
         {

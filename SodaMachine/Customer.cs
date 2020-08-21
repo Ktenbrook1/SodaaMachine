@@ -15,8 +15,7 @@ namespace SodaMachine
             backpack = new Backpack();
             wallet = new Wallet();
         }
-        //can do, can pick a soda, can pick change
-        public int CheckWallet(string coinPicked)
+        private int CheckWallet(string coinPicked)
         {
             int index = -1;
             for (int i = 0; i < wallet.customerCoins.Count; i++)
@@ -53,7 +52,7 @@ namespace SodaMachine
                 return "no";
             }            
         }
-        public string SelectCoins(int coinType)
+        private string SelectCoins(int coinType)
         {
 
             if (coinType == 1)
@@ -76,10 +75,6 @@ namespace SodaMachine
             {
                 return "no";
             }
-        }
-        public void SuccessfulPurchase()//pass through that one can
-        {
-            //add to backpack
         }
         public int FindCoin(int coinNumEntered, int locationOfCoin)
         {

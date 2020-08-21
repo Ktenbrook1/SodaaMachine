@@ -21,9 +21,7 @@ namespace SodaMachine
         int coinNumEntered;
         string userChoice;
         double costOfSoda;
-        
 
-        double newBalanceRemaining = 0.00;
         public Simulation()
         {
             sodaMachine = new SodaMachine();
@@ -31,47 +29,52 @@ namespace SodaMachine
         }
         public void RunMachine()
         {
+            bool buyAnother = false;
             do
             {
-                GetUserChoice();
-                GetLocation();
-            } while (locationOfSoda == -2);
-        
-            costOfSoda = sodaMachine.cans[locationOfSoda].Cost;
-            UserInterface.PriceOfSoda(sodaMachine.cans[locationOfSoda]);
+                do
+                {
+                    GetUserChoice();
+                    GetLocation();
+                } while (locationOfSoda == -2);
 
-            bool isValid;
-            do
-            {
-                isValid = false;
-                int cashOrCard = UserInterface.CardOrCash();
-                if (cashOrCard == 1)
+                costOfSoda = sodaMachine.cans[locationOfSoda].Cost;
+                UserInterface.PriceOfSoda(sodaMachine.cans[locationOfSoda]);
+
+                bool isValid;
+                do
                 {
-                    UsingCard();
-                    DispenceChange();
-                    UserInterface.Readline();
-                }
-                else if (cashOrCard == 2)
-                {
-                    UsingCash();
-                    DispenceChange();
-                    UserInterface.Readline();
-                }
-                else
-                {
-                    UserInterface.TryToSelectAgain();
-                    int continueOrCancel = UserInterface.CancelTransaction();
-                    if (continueOrCancel == 1)
+                    isValid = false;
+                    int cashOrCard = UserInterface.CardOrCash();
+                    if (cashOrCard == 1)
                     {
-                        UserInterface.VoidPurchase();
-                        Console.ReadKey();
-                        break;
+                        UsingCard();
+                        DispenceChange();
+                        UserInterface.Readline();
                     }
-                    isValid = true;
-                }
-            } while (isValid); 
+                    else if (cashOrCard == 2)
+                    {
+                        UsingCash();
+                        DispenceChange();
+                        UserInterface.Readline();
+                    }
+                    else
+                    {
+                        UserInterface.TryToSelectAgain();
+                        int continueOrCancel = UserInterface.CancelTransaction();
+                        if (continueOrCancel == 1)
+                        {
+                            UserInterface.VoidPurchase();
+                            Console.ReadKey();
+                            break;
+                        }
+                        isValid = true;
+                    }
+                } while (isValid);
+
+            } while (buyAnother);     
         }
-        public void GetUserChoice()
+        private void GetUserChoice()
         {
             do
             {
@@ -82,16 +85,13 @@ namespace SodaMachine
                 }
             } while (userChoice == "no");
         }
-        public void GetLocation()
+        private void GetLocation()
         {
-     
-                locationOfSoda = sodaMachine.CheckInventory(userChoice);
-                if (locationOfSoda == -1)
-                {
-                    UserInterface.TryToSelectAgain();
-                }
-                
-            
+            locationOfSoda = sodaMachine.CheckInventory(userChoice);
+            if (locationOfSoda == -1)
+            {
+                UserInterface.TryToSelectAgain();
+            }
         }
         private void UsingCard()
         {
@@ -150,10 +150,7 @@ namespace SodaMachine
                 moneyEntered.Add(customer.wallet.customerCoins[locationOfCoin]);
 
                 customer.wallet.customerCoins.RemoveAt(locationOfCoin);
-                
 
-                //show new balance if possible withput getting crzy number
-                newBalanceRemaining = costOfSoda - valueOfCoin;
                 UserInterface.YouNowOwe(PutInMoneyTotal(), costOfSoda);
 
             } while (PutInMoneyTotal() < costOfSoda);
