@@ -146,9 +146,18 @@ namespace SodaMachine
             string restInCash = Console.ReadLine().ToLower();
             return restInCash;
         }
-        public static void YouNowOwe(double moneyNeeded)
+        public static void YouNowOwe(double moneyNeeded, double costOfSoda)
         {
-            Console.WriteLine("You now owe {0}", moneyNeeded);
+            moneyNeeded = costOfSoda - moneyNeeded;
+            if(moneyNeeded > 0)
+            {
+                Console.WriteLine("You now owe {0}", moneyNeeded);
+            }
+            else
+            {
+                Console.WriteLine("We own you {0}", moneyNeeded);
+            }
+            
         }
         public static void MoneyDispenced(double moneyIn)
         {

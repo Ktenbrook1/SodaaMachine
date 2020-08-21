@@ -48,11 +48,14 @@ namespace SodaMachine
                 if (cashOrCard == 1)
                 {
                     UsingCard();
+                    DispenceChange();
+                    UserInterface.Readline();
                 }
                 else if (cashOrCard == 2)
                 {
                     UsingCash();
                     DispenceChange();
+                    UserInterface.Readline();
                 }
                 else
                 {
@@ -109,7 +112,7 @@ namespace SodaMachine
                 {
                     customer.wallet.card.ChargeCard(availableBalance);
                     costOfSoda -= availableBalance;
-                    UserInterface.YouNowOwe(costOfSoda);
+                    UserInterface.YouNowOwe(availableBalance, costOfSoda);
                     UsingCash();
                 }
                 else if(payRestInCoins == "no")
@@ -151,7 +154,7 @@ namespace SodaMachine
 
                 //show new balance if possible withput getting crzy number
                 newBalanceRemaining = costOfSoda - valueOfCoin;
-                UserInterface.YouNowOwe(newBalanceRemaining);
+                UserInterface.YouNowOwe(PutInMoneyTotal(), costOfSoda);
 
             } while (PutInMoneyTotal() < costOfSoda);
         }
