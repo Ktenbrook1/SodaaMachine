@@ -95,16 +95,28 @@ namespace SodaMachine
             if(customer.wallet.card.AvailiableFunds >= costOfSoda)
             {
                 UserInterface.SuccessfulPurchase();
-                double moneyTakenOut = costOfSoda;
                 customer.wallet.card.ChargeCard(costOfSoda);
                 customer.backpack.cansPurchased.Add(sodaMachine.cans[locationOfSoda]);
                 sodaMachine.cans.RemoveAt(locationOfSoda);
                 UserInterface.Readline();
             }
-            else
+            else if (customer.wallet.card.AvailiableFunds >= 0)
             {
-                UserInterface.VoidPurchase();
+                string payRestInCoins = UserInterface.YouOweMoney(customer.wallet.card.AvailiableFunds);
+                double availableBalance = customer.wallet.card.AvailiableFunds;
 
+                if(payRestInCoins == "yes")
+                {
+                    customer.wallet.card.ChargeCard(availableBalance);
+                    costOfSoda -= availableBalance;
+                    UserInterface.YouNowOwe(costOfSoda);
+                    UsingCash();
+                }
+                else if(payRestInCoins == "no")
+                {
+                    UserInterface.VoidPurchase();
+                    UserInterface.Readline();
+                }
             }
         }
         private void UsingCash()
@@ -139,11 +151,12 @@ namespace SodaMachine
 
                 //show new balance if possible withput getting crzy number
                 newBalanceRemaining = costOfSoda - valueOfCoin;
+                UserInterface.YouNowOwe(newBalanceRemaining);
+
             } while (PutInMoneyTotal() < costOfSoda);
         }
         private void DispenceChange()
         {
-            //if they enter to much for the system to give proper money back then cancel the transaction and return thr money
             if (PutInMoneyTotal() == costOfSoda)
             {
                 UserInterface.SuccessfulPurchase();
@@ -151,15 +164,14 @@ namespace SodaMachine
                 sodaMachine.cans.RemoveAt(locationOfSoda);
                 UserInterface.Readline();
             }
-            //if they enter to much but i can make change with what i have then I can return proper change and despence soda
             else if (PutInMoneyTotal() > costOfSoda)
             {
                 double moneyNeededBack = PutInMoneyTotal() - costOfSoda;
                 if(MoneyInMachineTotal() > moneyNeededBack)
                 {
                     UserInterface.NotEnoughChangeInMachine();
+                    UserInterface.MoneyDispenced(PutInMoneyTotal());
                     GiveBackMoney();
-                    //make it either run again with new change or allow them to void
                     UserInterface.Readline();
                 }
                 else

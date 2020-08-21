@@ -101,14 +101,8 @@ namespace SodaMachine
 
                 return coinEntered;
             } while (startOver);
-           
+
         }
-        //public static double RemainingBalance()
-        //{
-        //    return; 
-        //}
-       
-        //might not need this
         public static void OutOfItem()
         {
             Console.WriteLine("Looks like we are out of that soda, sorry for the inconvience." +
@@ -146,9 +140,19 @@ namespace SodaMachine
             Console.WriteLine("Were sorry but the amount you entered is to large for our machine to give you back " +
                 "\n the proper change. Here is your money back. Please enter a smaller amount to continue.");
         }
-        public static void YouOweMoney()
+        public static string YouOweMoney(double funds)
         {
-
+            Console.WriteLine("There was only {0} paid. Would you like to pay the rest in cash? 'yes' or 'no'", funds);
+            string restInCash = Console.ReadLine().ToLower();
+            return restInCash;
+        }
+        public static void YouNowOwe(double moneyNeeded)
+        {
+            Console.WriteLine("You now owe {0}", moneyNeeded);
+        }
+        public static void MoneyDispenced(double moneyIn)
+        {
+            Console.WriteLine("{0} has been despenced down below. Thank you.", moneyIn);
         }
         public static void Readline()
         {
