@@ -187,10 +187,27 @@ namespace SodaMachine
         {
             Console.WriteLine("{0} has been despenced down below. Thank you.", moneyIn);
         }
-        public static void BuyAnother()
+        public static bool BuyAnother()
         {
-            Console.WriteLine("Would you like to purchase another? 'yes' or 'no");
-
+            bool tryAgain = true;
+            bool buyAnother = false;
+            string buyOneMore;
+            do
+            {
+                Console.WriteLine("Would you like to purchase another? 'yes' or 'no");
+                buyOneMore = Console.ReadLine().ToLower();
+                if (buyOneMore == "yes")
+                {
+                    buyAnother = true;
+                    return buyAnother;
+                }
+                else if(buyOneMore == "no")
+                {
+                    return buyAnother;
+                }
+                TryToSelectAgain();
+            } while (tryAgain);
+            return buyAnother;
         }
         public static void Readline()
         {

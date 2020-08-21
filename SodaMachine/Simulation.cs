@@ -111,7 +111,6 @@ namespace SodaMachine
                 if(payRestInCoins == "yes")
                 {
                     customer.wallet.card.ChargeCard(availableBalance);
-                    costOfSoda -= availableBalance;
                     UserInterface.YouNowOwe(availableBalance, costOfSoda);
                     UsingCash();
                 }
