@@ -16,7 +16,7 @@ namespace SodaMachine
         }
         public Card()
         {
-            availableFunds = .50;
+            availableFunds = .15;
         }
 
         public void ChargeCard(double chargeValue)

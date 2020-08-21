@@ -17,7 +17,7 @@ namespace SodaMachine
         }
         public int CheckInventory(string sodaSelection)
         {
-            int indexOfSoda = -1;
+            int indexOfSoda;
             do
             {
                 for (int i = 0; i < cans.Count; i++)
@@ -27,9 +27,10 @@ namespace SodaMachine
                         return i;
                     }
                 }
+                UserInterface.OutOfItem();
+                return indexOfSoda = -2;
             } while (indexOfSoda == -1);
            
-            return indexOfSoda;
         }
         private void StartingInventory()
         {
@@ -66,7 +67,7 @@ namespace SodaMachine
                 Cola cola = new Cola();
                 cans.Add(cola);
             }
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 0; i++)
             {
                 OrangeSoda orangeSoda = new OrangeSoda();
                 cans.Add(orangeSoda);
